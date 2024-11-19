@@ -1,0 +1,7 @@
+[flake8]
+
+ignore = E501, W503, E231, B950, PT011, PIE803
+max-complexity = 12
+per-file-ignores =
+    itfn_gateway_webui/*:S101
+select = A,B,B9,C,E,EXE,F,M,PIE,PT,S,W
