@@ -1,0 +1,64 @@
+name: Manual workflow
+
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
+on:
+  push:
+      branches: [main,master]
+  pull_request:
+      branches: [main, master]
+
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+
+  tests:
+    # The type of runner that the job will run on
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+
+
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+
+      #Step 1: Checkout the code
+      - uses: actions/checkout@v4
+
+      # Step 2: Set up Python environment
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+              python-version: '3.11'
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      #step 4: ensure browsers are installed
+      - name: Ensure browsers are installed
+        run: python -m playwright install --with-deps
+
+      #step5 : Generating allure report
+      - name: Run behave tests
+        run: behave -f allure_behave.formatter:AllureFormatter -o reports/ features
+
+      # Step 7: Generate Allure HTML report
+      - name: Generate Allure HTML Report
+        run: allure generate reports -o allure-report --clean
+        #continue-on-error: true
+
+#      # Step 6: Upload Allure Report as an artifact
+#      - name: Upload Allure Report
+#        uses: actions/upload-artifact@v4
+#        with:
+#         name: allure-report
+#         path: allure-report/
+#
+#      # Step 7: Upload videos and screenshots (for debugging and reporting)
+#      - name: Upload Videos and Screenshots
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: videos-and-screenshots
+#          path: tmp_24-10-24/
+
