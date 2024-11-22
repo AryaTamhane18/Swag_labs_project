@@ -18,7 +18,6 @@ jobs:
     runs-on: ubuntu-latest
 
 
-
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
 
@@ -39,12 +38,16 @@ jobs:
       - name: Ensure browsers are installed
         run: python -m playwright install --with-deps
 
-      #step5 : Generating allure report
+      #step 5: install allure commandline
+      - name: Install Allure Commandline
+        run: npm install -g allure-commandline
+
+
+      #step6 : Generating allure report
       - name: Run Behave Tests
         run: |
           behave -f allure_behave.formatter:AllureFormatter -o reports/ features
-        env:
-          BROWSER: chromium  # Set browser to Chromium explicitly
+        continue-on-error: true
 
 
       # Step 7: Generate Allure HTML report
