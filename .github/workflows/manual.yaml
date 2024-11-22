@@ -40,13 +40,17 @@ jobs:
         run: python -m playwright install --with-deps
 
       #step5 : Generating allure report
-      - name: Run behave tests
-        run: behave -f allure_behave.formatter:AllureFormatter -o reports/ features
+      - name: Run Behave Tests
+        run: |
+          behave -f allure_behave.formatter:AllureFormatter -o reports/ features
+        env:
+          BROWSER: chromium  # Set browser to Chromium explicitly
+
 
       # Step 7: Generate Allure HTML report
       - name: Generate Allure HTML Report
         run: allure generate reports -o allure-report --clean
-        #continue-on-error: true
+        continue-on-error: true
 
 #      # Step 6: Upload Allure Report as an artifact
 #      - name: Upload Allure Report
