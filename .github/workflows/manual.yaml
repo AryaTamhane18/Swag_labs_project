@@ -45,15 +45,16 @@ jobs:
 
       #step6 : Generating allure report
       - name: Run Behave Tests
-        run: |
-          behave -f allure_behave.formatter:AllureFormatter -o reports/ features
-        continue-on-error: true
+        run:
+
+          xvfb-run behave -f allure_behave.formatter:AllureFormatter -o reports/ features
+        #continue-on-error: true
 
 
       # Step 7: Generate Allure HTML report
       - name: Generate Allure HTML Report
         run: allure generate reports -o allure-report --clean
-        continue-on-error: true
+        #continue-on-error: true
 
 #      # Step 6: Upload Allure Report as an artifact
 #      - name: Upload Allure Report
